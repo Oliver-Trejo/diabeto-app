@@ -33,7 +33,8 @@ def cargar_css(path):
 
 def conectar_google_sheet(nombre=None, key=None):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds_dict = json.loads(st.secrets["gcp_service_account"])
+    raw_string = st.secrets["gcp_service_account"].replace('\\\\n', '\\n')
+    creds_dict = json.loads(raw_string)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
     return client.open_by_key(key).sheet1 if key else client.open(nombre).sheet1
