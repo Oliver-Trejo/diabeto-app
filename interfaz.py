@@ -33,11 +33,15 @@ def cargar_css(path):
 
 def conectar_google_sheet(nombre=None, key=None):
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    raw_string = st.secrets["gcp_service_account"].replace('\\\\n', '\\n')
-    creds_dict = json.loads(st.secrets["gcp_service_account"])
-    creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-    client = gspread.authorize(creds)
-    return client.open_by_key(key).sheet1 if key else client.open(nombre).sheet1
+    try:
+        creds_dict = json.loads(st.secrets["gcp_service_account"])
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        client = gspread.authorize(creds)
+        return client.open_by_key(key).sheet1 if key else client.open(nombre).sheet1
+    except Exception as e:
+        st.error(f"❌ Error al conectar con Google Sheets: {e}")
+        return None
 
 def render_pregunta(pregunta, key):
     tipo, label = pregunta["tipo"], pregunta["label"]
