@@ -1,0 +1,8 @@
+# Evitar subir credenciales
+credentials.json
+*.key
+*.env
+
+# Archivos de Python que no se necesitan
+__pycache__/
+*.pyc
