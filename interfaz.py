@@ -89,7 +89,7 @@ def mostrar_pacientes():
     st.title("📋 Lista de Pacientes Registrados")
     sheet = conectar_google_sheet(key="1C5H_AJQtMCvNdHfs55Hv8vl_LcwAI0_syK85JV1KUv0")
     if sheet is None:
-    return
+        return
     df = pd.DataFrame(sheet.get_all_records())
     if df.empty:
         st.info("Aún no hay pacientes registrados.")
